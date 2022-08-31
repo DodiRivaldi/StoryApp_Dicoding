@@ -1,2 +1,4 @@
 # CeritaApp-DicodingAndroidIntermediate
-Submission StoryApp - Dicoding Android Intermediate
+This repository contains the source code of submission on Dicoding.com Belajar Pengembangan Aplikasi Android Intermediate course - Mobile Development Learning Path.
+
+
