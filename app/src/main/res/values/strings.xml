@@ -8,4 +8,5 @@
     <string name="please_sign_in_to_continue">Please sign in to continue</string>
     <string name="sign_in">Sign In</string>
     <string name="sign_up">Sign Up</string>
+    <string name="usename">Usename</string>
 </resources>
