@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/signInFragment"
-        android:name="com.dodi.cerita.SignInFragment"
+        android:name="com.dodi.cerita.ui.fragment.signin.SignInFragment"
         android:label="fragment_sign_in"
         tools:layout="@layout/fragment_sign_in" >
         <action
@@ -16,8 +16,8 @@
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
-        android:name="com.dodi.cerita.SignUpFragment"
-        android:label="fragment_sign_up"
+        android:name="com.dodi.cerita.ui.fragment.signup.SignUpFragment"
+        android:label="fragment_sign_up'"
         tools:layout="@layout/fragment_sign_up" >
         <action
             android:id="@+id/action_signUpFragment_to_signInFragment"

@@ -15,6 +15,12 @@
         android:theme="@style/Theme.Cerita"
         tools:targetApi="31">
         <activity
+            android:name=".ui.activity.home.HomeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.user.UserActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.activity.MainActivity"
             android:exported="true">
             <intent-filter>

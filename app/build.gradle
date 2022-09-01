@@ -62,8 +62,8 @@ dependencies {
     kapt 'com.github.bumptech.glide:compiler:4.13.1'
 
     //Hilt
-    implementation 'com.google.dagger:hilt-android:2.41'
-    kapt 'com.google.dagger:hilt-android-compiler:2.41'
+    implementation 'com.google.dagger:hilt-android:2.42'
+    kapt 'com.google.dagger:hilt-android-compiler:2.42'
 
     //DataStore
     implementation "androidx.datastore:datastore-preferences:1.0.0"
