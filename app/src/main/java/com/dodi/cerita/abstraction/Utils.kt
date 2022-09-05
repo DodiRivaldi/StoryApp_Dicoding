@@ -31,7 +31,7 @@ fun convertUriFile(uri :Uri,context: Context):File{
 }
 
 fun rotateImage(bitmap :Bitmap,isBack :Boolean=false):Bitmap{
-    val matrix = Matrix();
+    val matrix = Matrix()
     return if (isBack){
         matrix.postRotate(90f)
         Bitmap.createBitmap(bitmap,0,0,bitmap.width,bitmap.height,matrix,true)

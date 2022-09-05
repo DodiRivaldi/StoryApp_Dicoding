@@ -18,6 +18,7 @@
         app:titleTextColor="@color/white"/>
 
     <ImageView
+        android:contentDescription="@string/image_story"
         android:id="@+id/img"
         android:layout_width="match_parent"
         android:layout_height="300dp"

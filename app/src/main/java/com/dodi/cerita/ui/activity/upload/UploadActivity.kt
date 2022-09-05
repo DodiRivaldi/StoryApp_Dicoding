@@ -78,11 +78,11 @@ class UploadActivity : AppCompatActivity() {
                 val dialogBuilder = AlertDialog.Builder(this@UploadActivity)
                 dialogBuilder.setMessage(getString(R.string.selectimagesource))
                     .setCancelable(true)
-                    .setPositiveButton(getString(R.string.camera)) { dialog, id ->
+                    .setPositiveButton(getString(R.string.camera)) { dialog, _ ->
                         dialog.cancel()
                         openCamera()
                     }
-                    .setNegativeButton(getString(R.string.gallery)) { dialog, id ->
+                    .setNegativeButton(getString(R.string.gallery)) { dialog, _ ->
                         dialog.cancel()
                         openGallery()
                     }

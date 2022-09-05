@@ -2,7 +2,6 @@ package com.dodi.cerita.ui.fragment.signin
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -21,15 +20,21 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SignInFragment : Fragment() {
-    private lateinit var binding: FragmentSignInBinding
+    private var _binding : FragmentSignInBinding? = null
+    private val binding get() = _binding!!
     private val viewModel : SignInViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentSignInBinding.inflate(inflater,container,false)
+        _binding = FragmentSignInBinding.inflate(inflater,container,false)
         return binding.root
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 
 

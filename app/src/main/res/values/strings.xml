@@ -28,4 +28,7 @@
     <string name="camera">Camera</string>
     <string name="gallery">Gallery</string>
     <string name="info">Info</string>
+    <string name="image_logo">Image logo</string>
+    <string name="image_story">Image story</string>
+    <string name="image_reload">Image reload</string>
 </resources>
