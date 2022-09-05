@@ -1,4 +1,4 @@
-package com.dodi.cerita.ui.activity
+package com.dodi.cerita.ui.activity.main
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,10 +8,8 @@ import androidx.lifecycle.viewModelScope
 import com.dodi.cerita.R
 import com.dodi.cerita.ui.activity.home.HomeActivity
 import com.dodi.cerita.ui.activity.home.HomeActivity.Companion.TOKEN
-import com.dodi.cerita.ui.activity.main.MainViewModel
 import com.dodi.cerita.ui.activity.user.UserActivity
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint

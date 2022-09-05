@@ -31,7 +31,7 @@ class CeritaRepository @Inject constructor(
         pref.setToken(token)
     }
 
-    suspend fun register(name:String, email:String,password:String): Flow<Result<DefaultResponse>> = flow {
+    suspend fun signUp(name:String, email:String, password:String): Flow<Result<DefaultResponse>> = flow {
         try {
             val response = apiService.register(name,email,password)
             Log.d(RESPONSE_TAG,"SUCCES")
@@ -42,7 +42,7 @@ class CeritaRepository @Inject constructor(
         }
     }
 
-    suspend fun login(email:String, password:String): Flow<Result<LoginResponse>> = flow {
+    suspend fun signIn(email:String, password:String): Flow<Result<LoginResponse>> = flow {
         try {
             val response = apiService.login(email,password)
             Log.d(RESPONSE_TAG,"SUCCESS")
@@ -53,10 +53,10 @@ class CeritaRepository @Inject constructor(
         }
     }
 
-    suspend fun getStory(token:String): Flow<PagingData<CeritaItem>>{
+    fun getStory(token:String): Flow<PagingData<CeritaItem>>{
         return Pager(
             config = PagingConfig(pageSize = 5),
-            remoteMediator = CeritaDataMediator(ceritaDb,apiService,"Beare $token"),
+            remoteMediator = CeritaDataMediator(ceritaDb,apiService,"Bearer $token"),
             pagingSourceFactory = {ceritaDb.ceritaDao().getAllCerita()}
         ).flow
     }

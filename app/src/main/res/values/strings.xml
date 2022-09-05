@@ -9,4 +9,23 @@
     <string name="sign_in">Sign In</string>
     <string name="sign_up">Sign Up</string>
     <string name="usename">Usename</string>
+    <string name="email_empty">Email cannot be empty</string>
+    <string name="password_empty">Password cannot be empty</string>
+    <string name="emailpassword_empty">Email and Password cannot be empty</string>
+    <string name="desc_empty">Description cannot be empty</string>
+    <string name="usernameemailpassword_empty">Username, Email and Password cannot be empty</string>
+    <string name="username_empty">Username cannot be empty</string>
+    <string name="reload">RELOAD</string>
+    <string name="add">Add</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="select_image">SELECT IMAGE</string>
+    <string name="add_desc">Add desc</string>
+    <string name="upload">UPLOAD</string>
+    <string name="enablepermission">Enable location permission first</string>
+    <string name="selectimagefirst">Select image first</string>
+    <string name="error">Error</string>
+    <string name="selectimagesource">Please select image source</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+    <string name="info">Info</string>
 </resources>

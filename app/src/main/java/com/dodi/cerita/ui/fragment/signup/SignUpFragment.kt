@@ -5,56 +5,62 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.viewModelScope
+import androidx.navigation.fragment.findNavController
 import com.dodi.cerita.R
+import com.dodi.cerita.abstraction.showProgressBar
+import com.dodi.cerita.abstraction.showToast
+import com.dodi.cerita.databinding.FragmentSignUpBinding
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [SignUpFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
+@AndroidEntryPoint
 class SignUpFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private lateinit var binding : FragmentSignUpBinding
+    private val viewModel : SignUpViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_sign_up, container, false)
+        binding = FragmentSignUpBinding.inflate(inflater,container,false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SignUpFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            SignUpFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.btnSignup.setOnClickListener {
+            signUp(binding.edtUsername.text.toString(),binding.edtEmail.text.toString(),binding.edtPassword.text.toString())
+        }
+    }
+
+    private fun signUp(name : String, email : String, password : String){
+        showProgressBar(true,binding.pbSignup)
+        viewModel.viewModelScope.launch {
+            viewModel.signUp(name, email, password).collect{value->
+                value.onSuccess { findNavController().navigate(R.id.action_signUpFragment_to_signInFragment) }
+                when{
+                    name.isEmpty()->{
+                        showToast(requireContext(),getString(R.string.username_empty))
+                        showProgressBar(false,binding.pbSignup)
+                    }
+                    email.isEmpty()->{
+                        showToast(requireContext(),getString(R.string.email_empty))
+                        showProgressBar(false,binding.pbSignup)
+                    }
+                    password.isEmpty()->{
+                        showToast(requireContext(),getString(R.string.password_empty))
+                        showProgressBar(false,binding.pbSignup)
+                    }
+                    else->{
+                        value.onFailure {
+                            showToast(requireContext(),getString(R.string.usernameemailpassword_empty))
+                            showProgressBar(false,binding.pbSignup)
+                        }
+                    }
                 }
             }
+        }
     }
 }
