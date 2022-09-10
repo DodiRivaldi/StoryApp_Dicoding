@@ -17,46 +17,53 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SignUpFragment : Fragment() {
-    private lateinit var binding : FragmentSignUpBinding
-    private val viewModel : SignUpViewModel by viewModels()
+    private lateinit var binding: FragmentSignUpBinding
+    private val viewModel: SignUpViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentSignUpBinding.inflate(inflater,container,false)
+        binding = FragmentSignUpBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.btnSignup.setOnClickListener {
-            signUp(binding.edtUsername.text.toString(),binding.edtEmail.text.toString(),binding.edtPassword.text.toString())
+            signUp(
+                binding.edtUsername.text.toString(),
+                binding.edtEmail.text.toString(),
+                binding.edtPassword.text.toString()
+            )
         }
     }
 
-    private fun signUp(name : String, email : String, password : String){
-        showProgressBar(true,binding.pbSignup)
+    private fun signUp(name: String, email: String, password: String) {
+        showProgressBar(true, binding.pbSignup)
         viewModel.viewModelScope.launch {
-            viewModel.signUp(name, email, password).collect{value->
+            viewModel.signUp(name, email, password).collect { value ->
                 value.onSuccess { findNavController().navigate(R.id.action_signUpFragment_to_signInFragment) }
-                when{
-                    name.isEmpty()->{
-                        showToast(requireContext(),getString(R.string.username_empty))
-                        showProgressBar(false,binding.pbSignup)
+                when {
+                    name.isEmpty() -> {
+                        showToast(requireContext(), getString(R.string.username_empty))
+                        showProgressBar(false, binding.pbSignup)
                     }
-                    email.isEmpty()->{
-                        showToast(requireContext(),getString(R.string.email_empty))
-                        showProgressBar(false,binding.pbSignup)
+                    email.isEmpty() -> {
+                        showToast(requireContext(), getString(R.string.email_empty))
+                        showProgressBar(false, binding.pbSignup)
                     }
-                    password.isEmpty()->{
-                        showToast(requireContext(),getString(R.string.password_empty))
-                        showProgressBar(false,binding.pbSignup)
+                    password.isEmpty() -> {
+                        showToast(requireContext(), getString(R.string.password_empty))
+                        showProgressBar(false, binding.pbSignup)
                     }
-                    else->{
+                    else -> {
                         value.onFailure {
-                            showToast(requireContext(),getString(R.string.usernameemailpassword_empty))
-                            showProgressBar(false,binding.pbSignup)
+                            showToast(
+                                requireContext(),
+                                getString(R.string.usernameemailpassword_empty)
+                            )
+                            showProgressBar(false, binding.pbSignup)
                         }
                     }
                 }

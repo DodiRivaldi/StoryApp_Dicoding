@@ -10,10 +10,14 @@ import okhttp3.RequestBody
 import javax.inject.Inject
 
 @HiltViewModel
-class UploadViewModel @Inject constructor(private val repo : CeritaRepository) : ViewModel(){
+class UploadViewModel @Inject constructor(private val repo: CeritaRepository) : ViewModel() {
     fun getToken(): Flow<String?> = repo.getToken()
 
     suspend fun upload(
-        token : String,desc : RequestBody,lat : RequestBody?, long : RequestBody?,image : MultipartBody.Part
-    ): Flow<Result<DefaultResponse>> = repo.uploadStory(token,image,desc,lat,long)
+        token: String,
+        desc: RequestBody,
+        lat: RequestBody?,
+        long: RequestBody?,
+        image: MultipartBody.Part
+    ): Flow<Result<DefaultResponse>> = repo.uploadStory(token, image, desc, lat, long)
 }

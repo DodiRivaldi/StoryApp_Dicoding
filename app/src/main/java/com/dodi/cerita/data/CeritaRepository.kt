@@ -10,6 +10,7 @@ import com.dodi.cerita.abstraction.network.ApiService
 import com.dodi.cerita.data.local.UserPref
 import com.dodi.cerita.data.local.db.CeritaDb
 import com.dodi.cerita.data.local.db.CeritaItem
+import com.dodi.cerita.data.remote.response.CeritaResponse
 import com.dodi.cerita.data.remote.response.DefaultResponse
 import com.dodi.cerita.data.remote.response.LoginResponse
 import kotlinx.coroutines.flow.Flow
@@ -24,53 +25,69 @@ class CeritaRepository @Inject constructor(
     private val apiService: ApiService,
     private val pref: UserPref,
     private val ceritaDb: CeritaDb
-){
+) {
     fun getToken(): Flow<String?> = pref.getToken()
 
-    suspend fun setToken(token:String){
+    suspend fun setToken(token: String) {
         pref.setToken(token)
     }
 
-    suspend fun signUp(name:String, email:String, password:String): Flow<Result<DefaultResponse>> = flow {
+    fun signUp(
+        name: String,
+        email: String,
+        password: String
+    ): Flow<Result<DefaultResponse>> = flow {
         try {
-            val response = apiService.register(name,email,password)
-            Log.d(RESPONSE_TAG,"SUCCES")
+            val response = apiService.register(name, email, password)
+            Log.d(RESPONSE_TAG, "SUCCES")
             emit(Result.success(response))
-        }catch (ex :Exception){
-            Log.e(RESPONSE_TAG,"FAILED")
+        } catch (ex: Exception) {
+            Log.e(RESPONSE_TAG, "FAILED")
             emit(Result.failure(ex))
         }
     }
 
-    suspend fun signIn(email:String, password:String): Flow<Result<LoginResponse>> = flow {
+    fun signIn(email: String, password: String): Flow<Result<LoginResponse>> = flow {
         try {
-            val response = apiService.login(email,password)
-            Log.d(RESPONSE_TAG,"SUCCESS")
+            val response = apiService.login(email, password)
+            Log.d(RESPONSE_TAG, "SUCCESS")
             emit(Result.success(response))
-        }catch (ex : Exception){
-            Log.e(RESPONSE_TAG,"FAILED")
+        } catch (ex: Exception) {
+            Log.e(RESPONSE_TAG, "FAILED")
             emit(Result.failure(ex))
         }
     }
 
-    fun getStory(token:String): Flow<PagingData<CeritaItem>>{
+    fun getStory(token: String): Flow<PagingData<CeritaItem>> {
         return Pager(
             config = PagingConfig(pageSize = 5),
-            remoteMediator = CeritaDataMediator(ceritaDb,apiService,"Bearer $token"),
-            pagingSourceFactory = {ceritaDb.ceritaDao().getAllCerita()}
+            remoteMediator = CeritaDataMediator(ceritaDb, apiService, "Bearer $token"),
+            pagingSourceFactory = { ceritaDb.ceritaDao().getAllCerita() }
         ).flow
     }
 
-    suspend fun uploadStory(token: String,file : MultipartBody.Part,description:RequestBody,
-    lat:RequestBody?,lon:RequestBody?): Flow<Result<DefaultResponse>> = flow {
+    fun uploadStory(
+        token: String, file: MultipartBody.Part, description: RequestBody,
+        lat: RequestBody?, lon: RequestBody?
+    ): Flow<Result<DefaultResponse>> = flow {
         try {
             val token = "Bearer $token"
-            val response = apiService.uploadStory(token,file,description,lat,lon)
-            Log.d(RESPONSE_TAG,"SUCCESS")
+            val response = apiService.uploadStory(token, file, description, lat, lon)
+            Log.d(RESPONSE_TAG, "SUCCESS")
             emit(Result.success(response))
-        }catch (ex : Exception){
-            Log.e(RESPONSE_TAG,"FAILED")
+        } catch (ex: Exception) {
+            Log.e(RESPONSE_TAG, "FAILED")
             emit(Result.failure(ex))
+        }
+    }
+
+    fun getStoryLoc(token: String): Flow<Result<CeritaResponse>> = flow {
+        try {
+            val bearerToken = "Bearer $token"
+            val response = apiService.getStory(bearerToken,null, size = 100, location = 1)
+            emit(Result.success(response))
+        }catch (e : Exception){
+            emit(Result.failure(e))
         }
     }
 }

@@ -1,0 +1,73 @@
+- Animation menggunakan Property Animation yang terdapat pada MainActivity
+
+- Unit Testing :
+1. SignInViewModel()
+    a. SignIn Success :
+    - Memastikan class CeritaRepository terpanggil
+    - Memastikan response tidak null
+
+    b. SignIn Failed
+    - Memastikan class CeritaRepository terpanggil
+    - Memastikan response null
+
+2. SignUpViewModel()
+    a. SignUp Success :
+    - Memastikan class CeritaRepository terpanggil
+    - Memastikan response tidak null
+
+    b. SignUp Failed :
+    - Memastikan class CeritaRepository terpanggil
+    - Memastikan response null
+
+3. UploadViewModel()
+    a. Upload Success :
+    - Memastikan class CeritaRepository terpanggil
+    - Memastikan response tidak null
+
+    b. Upload Failed :
+    - Memastikan class CeritaRepository terpanggil
+    - Memastikan response null
+
+    c. Get Token Success :
+    - Memastikan class CeritaRepository terpanggil
+    - Memastikan token tidak null
+
+4. MainViewModel()
+    a. Get Token Success :
+    - Memastikan class CeritaRepository terpanggil
+    - Memastikan token tidak null
+
+5. HomeViewModel()
+    a. Success Get Story
+    - Memastikan class CeritaRepository terpanggil
+    - Memastikan response tidak null
+
+6. LocationViewModel()
+    a. Get Story Success :
+    - Memastikan class CeritaRepository terpanggil
+    - Memastikan response tidak null
+
+    b. Get Story Failed :
+    - Memastikan class CeritaRepository terpanggil
+    - Memastikan response null
+
+    c. Get Token Success :
+    - Memastikan class CeritaRepository terpanggil
+    - Memastikan token tidak null
+
+7. CeritaRepository()
+    a. SignIn Success :
+    - Memastikan response tidak null
+
+    b. Get Token Success :
+    - Memastikan response tidak null
+
+    c. SignUp Success :
+    - Memastikan response tidak null
+
+    d. Upload Success :
+    - Memastikan response tidak null
+
+    d. Get Loc Story Success :
+    - Memastikan response tidak null
+

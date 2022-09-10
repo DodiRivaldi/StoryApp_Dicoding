@@ -8,10 +8,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SignInViewModel @Inject constructor(private val repo : CeritaRepository) : ViewModel(){
-    suspend fun signIn(email : String, password : String) = repo.signIn(email,password)
+class SignInViewModel @Inject constructor(private val repo: CeritaRepository) : ViewModel() {
+    suspend fun signIn(email: String, password: String) = repo.signIn(email, password)
 
-    fun saveToken(token : String){
+    fun saveToken(token: String) {
         viewModelScope.launch {
             repo.setToken(token)
         }

@@ -8,10 +8,10 @@ import androidx.room.Query
 @Dao
 interface KeyDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertKey(key : List<KeyItem>)
+    suspend fun insertKey(key: List<KeyItem>)
 
     @Query("SELECT * FROM keyitems WHERE id = :id")
-    suspend fun getKeyById(id:String):KeyItem?
+    suspend fun getKeyById(id: String): KeyItem?
 
     @Query("DELETE FROM keyitems")
     suspend fun deleteKey()

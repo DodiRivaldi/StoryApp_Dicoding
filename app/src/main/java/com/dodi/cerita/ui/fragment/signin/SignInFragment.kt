@@ -20,15 +20,15 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SignInFragment : Fragment() {
-    private var _binding : FragmentSignInBinding? = null
+    private var _binding: FragmentSignInBinding? = null
     private val binding get() = _binding!!
-    private val viewModel : SignInViewModel by viewModels()
+    private val viewModel: SignInViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentSignInBinding.inflate(inflater,container,false)
+        _binding = FragmentSignInBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -41,46 +41,50 @@ class SignInFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.btnSignin.setOnClickListener{
-            signIn(binding.edtEmail.text.toString(),binding.edtPassword.text.toString())
+        binding.btnSignin.setOnClickListener {
+            signIn(binding.edtEmail.text.toString(), binding.edtPassword.text.toString())
 
         }
 
         binding.tvSignup.setOnClickListener(
-            Navigation.createNavigateOnClickListener(R.id.action_signInFragment_to_signUpFragment, null));
+            Navigation.createNavigateOnClickListener(
+                R.id.action_signInFragment_to_signUpFragment,
+                null
+            )
+        )
     }
 
-    private fun signIn(email : String, password : String){
+    private fun signIn(email: String, password: String) {
         showProgressBar(true, binding.pbSignin)
         viewModel.viewModelScope.launch {
-            viewModel.signIn(email,password).collect{
+            viewModel.signIn(email, password).collect {
                 it.onSuccess { value ->
-                    value.loginResult.token.let { token->
+                    value.loginResult.token.let { token ->
                         viewModel.saveToken(token)
-                        Intent(requireContext(),HomeActivity::class.java).also { intent->
-                            intent.putExtra(TOKEN,token)
+                        Intent(requireContext(), HomeActivity::class.java).also { intent ->
+                            intent.putExtra(TOKEN, token)
                             startActivity(intent)
                             requireActivity().finish()
                         }
                     }
                 }
-                when{
-                    email.isEmpty()->{
+                when {
+                    email.isEmpty() -> {
                         it.onFailure {
-                            showToast(requireContext(),getString(R.string.email_empty))
-                            showProgressBar(false,binding.pbSignin)
+                            showToast(requireContext(), getString(R.string.email_empty))
+                            showProgressBar(false, binding.pbSignin)
                         }
                     }
-                    password.isEmpty()->{
+                    password.isEmpty() -> {
                         it.onFailure {
-                            showToast(requireContext(),getString(R.string.password_empty))
-                            showProgressBar(false,binding.pbSignin)
+                            showToast(requireContext(), getString(R.string.password_empty))
+                            showProgressBar(false, binding.pbSignin)
                         }
                     }
-                    else->{
+                    else -> {
                         it.onFailure {
-                            showToast(requireContext(),getString(R.string.emailpassword_empty))
-                            showProgressBar(false,binding.pbSignin)
+                            showToast(requireContext(), getString(R.string.emailpassword_empty))
+                            showProgressBar(false, binding.pbSignin)
                         }
                     }
                 }

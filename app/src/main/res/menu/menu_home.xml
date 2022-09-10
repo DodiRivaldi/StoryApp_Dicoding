@@ -10,6 +10,13 @@
         />
 
     <item
+        android:id="@+id/menu_loc"
+        android:icon="@android:drawable/ic_dialog_map"
+        app:showAsAction="always"
+        android:title="@string/location"
+        />
+
+    <item
         android:id="@+id/menu_signout"
         android:icon="@android:drawable/ic_menu_close_clear_cancel"
         app:showAsAction="always"

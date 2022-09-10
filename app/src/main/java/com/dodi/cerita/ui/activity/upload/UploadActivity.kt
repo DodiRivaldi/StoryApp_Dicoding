@@ -39,15 +39,15 @@ import java.io.FileOutputStream
 
 @AndroidEntryPoint
 class UploadActivity : AppCompatActivity() {
-    private val viewModel : UploadViewModel by viewModels()
-    private lateinit var photoPath : String
-    private lateinit var fusedLocationc : FusedLocationProviderClient
-    private var file : File? = null
-    private var loc : Location? = null
-    private var lat : RequestBody? = null
-    private var long : RequestBody?= null
+    private val viewModel: UploadViewModel by viewModels()
+    private lateinit var photoPath: String
+    private lateinit var fusedLocationc: FusedLocationProviderClient
+    private var file: File? = null
+    private var loc: Location? = null
+    private var lat: RequestBody? = null
+    private var long: RequestBody? = null
     private lateinit var binding: ActivityUploadBinding
-    private lateinit var token : String
+    private lateinit var token: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,16 +60,20 @@ class UploadActivity : AppCompatActivity() {
         getLatLong()
         //get token
         viewModel.viewModelScope.launch {
-            viewModel.getToken().collect{
-                token = it!!
+            viewModel.getToken().collect {
+                if (it != null) {
+                    token = it
+                }else{
+                    token = ""
+                }
             }
         }
 
         binding.apply {
             btnUpload.setOnClickListener {
-                if (edtDesc.text.toString().isNullOrEmpty()){
-                    showToast(this@UploadActivity,getString(R.string.desc_empty))
-                }else{
+                if (edtDesc.text.toString().isNullOrEmpty()) {
+                    showToast(this@UploadActivity, getString(R.string.desc_empty))
+                } else {
                     upload(edtDesc.text.toString())
                 }
             }
@@ -95,25 +99,26 @@ class UploadActivity : AppCompatActivity() {
 
     }
 
-    private fun upload(desc : String){
-        if (file != null){
-            showProgressBar(true,binding.pbUpload)
+    private fun upload(desc: String) {
+        if (file != null) {
+            showProgressBar(true, binding.pbUpload)
             val fileReduce = reduceImageSize(file as File)
             val descBody = desc.toRequestBody("text/plain".toMediaType())
             val imageFile = fileReduce.asRequestBody("image/png".toMediaType())
-            val imgMultiPart : MultipartBody.Part = MultipartBody.Part.createFormData("photo",fileReduce.name,imageFile)
+            val imgMultiPart: MultipartBody.Part =
+                MultipartBody.Part.createFormData("photo", fileReduce.name, imageFile)
 
-            if (loc != null){
+            if (loc != null) {
                 lat = loc?.latitude.toString().toRequestBody("text/plain".toMediaType())
                 long = loc?.longitude.toString().toRequestBody("text/plain".toMediaType())
             }
 
             viewModel.viewModelScope.launch {
-                viewModel.upload(token,descBody,lat,long,imgMultiPart).collect{
+                viewModel.upload(token, descBody, lat, long, imgMultiPart).collect {
                     it.onSuccess {
-                        Intent(this@UploadActivity,HomeActivity::class.java).also {
+                        Intent(this@UploadActivity, HomeActivity::class.java).also {
                             it.apply {
-                                putExtra(TOKEN,token)
+                                putExtra(TOKEN, token)
                                 flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                             }
                             startActivity(it)
@@ -121,78 +126,85 @@ class UploadActivity : AppCompatActivity() {
                         }
                     }
                     it.onFailure {
-                        showToast(this@UploadActivity,getString(R.string.error))
-                        showProgressBar(false,binding.pbUpload)
+                        showToast(this@UploadActivity, getString(R.string.error))
+                        showProgressBar(false, binding.pbUpload)
                     }
                 }
             }
-        }else{
-            showProgressBar(false,binding.pbUpload)
-            showToast(this,getString(R.string.selectimagefirst))
+        } else {
+            showProgressBar(false, binding.pbUpload)
+            showToast(this, getString(R.string.selectimagefirst))
 
         }
     }
 
-    private fun getLatLong(){
-        if (ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+    private fun getLatLong() {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
             fusedLocationc.lastLocation.addOnSuccessListener {
-                if (it != null){
+                if (it != null) {
                     this.loc = it
-                }else{
-                    showToast(this,getString(R.string.enablepermission))
+                } else {
+                    showToast(this, getString(R.string.enablepermission))
                 }
             }
-        }else{
+        } else {
             requestPermission.launch(Manifest.permission.ACCESS_FINE_LOCATION)
         }
     }
 
     private val requestPermission = registerForActivityResult(
-        ActivityResultContracts.RequestPermission()){isAllow : Boolean->
-        if (isAllow){
+        ActivityResultContracts.RequestPermission()
+    ) { isAllow: Boolean ->
+        if (isAllow) {
 
-        }else{
-            showToast(this,getString(R.string.enablepermission))
+        } else {
+            showToast(this, getString(R.string.enablepermission))
         }
     }
 
-    private val intentCamera = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
-        if (it.resultCode == RESULT_OK){
-            val newFile = File(photoPath)
-            val result: Bitmap = rotateImage(BitmapFactory.decodeFile(newFile.path),true)
-            val outputStream = FileOutputStream(newFile)
-            result.compress(Bitmap.CompressFormat.PNG,100,outputStream)
-            outputStream.flush()
-            outputStream.close()
-            file = newFile
-            binding.imgUpload.setImageBitmap(result)
+    private val intentCamera =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode == RESULT_OK) {
+                val newFile = File(photoPath)
+                val result: Bitmap = rotateImage(BitmapFactory.decodeFile(newFile.path), true)
+                val outputStream = FileOutputStream(newFile)
+                result.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+                outputStream.flush()
+                outputStream.close()
+                file = newFile
+                binding.imgUpload.setImageBitmap(result)
+            }
         }
-    }
 
-    private val intentGallery = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
-        if (it.resultCode == RESULT_OK){
-            val item : Uri = it.data?.data as Uri
-            val itemFile = convertUriFile(item, this@UploadActivity)
-            file = itemFile
-            binding.imgUpload.setImageURI(item)
+    private val intentGallery =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode == RESULT_OK) {
+                val item: Uri = it.data?.data as Uri
+                val itemFile = convertUriFile(item, this@UploadActivity)
+                file = itemFile
+                binding.imgUpload.setImageURI(item)
+            }
         }
-    }
 
-    private fun openGallery(){
+    private fun openGallery() {
         val intent = Intent()
         intent.action = Intent.ACTION_GET_CONTENT
         intent.type = "image/*"
-        val selected = Intent.createChooser(intent,getString(R.string.select_image))
+        val selected = Intent.createChooser(intent, getString(R.string.select_image))
         intentGallery.launch(selected)
     }
 
-    private fun openCamera(){
+    private fun openCamera() {
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         intent.resolveActivity(packageManager)
         tempFile(application).also {
-            val fileUri : Uri = FileProvider.getUriForFile(this,BuildConfig.APPLICATION_ID,it)
+            val fileUri: Uri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID, it)
             photoPath = it.absolutePath
-            intent.putExtra(MediaStore.EXTRA_OUTPUT,fileUri)
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri)
             intentCamera.launch(intent)
         }
     }

@@ -4,9 +4,9 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "keyitems")
-class KeyItem (
+class KeyItem(
     @PrimaryKey
-    val id :String,
-    val prev : Int?,
-    val next : Int?
+    val id: String,
+    val prev: Int?,
+    val next: Int?
 )

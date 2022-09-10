@@ -18,17 +18,18 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
-private val Context.dataStore : DataStore<Preferences> by preferencesDataStore("application")
+private val Context.dataStore: DataStore<Preferences> by preferencesDataStore("application")
 
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
     @Provides
     @Singleton
-    fun provideApiService():ApiService = ApiConfig.getApiConfig()
+    fun provideApiService(): ApiService = ApiConfig.getApiConfig()
 
     @Provides
-    fun provideDataSource(@ApplicationContext context: Context):DataStore<Preferences> = context.dataStore
+    fun provideDataSource(@ApplicationContext context: Context): DataStore<Preferences> =
+        context.dataStore
 
     @Provides
     @Singleton
@@ -36,12 +37,12 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideDb(@ApplicationContext context: Context): CeritaDb{
-        return Room.databaseBuilder(context,CeritaDb::class.java,"cerita_db").build()
+    fun provideDb(@ApplicationContext context: Context): CeritaDb {
+        return Room.databaseBuilder(context, CeritaDb::class.java, "cerita_db").build()
     }
 
     @Provides
-    fun provideCeritaDao(ceritaDb: CeritaDb) : CeritaDao = ceritaDb.ceritaDao()
+    fun provideCeritaDao(ceritaDb: CeritaDb): CeritaDao = ceritaDb.ceritaDao()
 
     @Provides
     fun provideKeyDao(ceritaDb: CeritaDb): KeyDao = ceritaDb.keyDao()

@@ -7,6 +7,6 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(private val repo : CeritaRepository): ViewModel() {
+class MainViewModel @Inject constructor(private val repo: CeritaRepository) : ViewModel() {
     fun getToken(): Flow<String?> = repo.getToken()
 }

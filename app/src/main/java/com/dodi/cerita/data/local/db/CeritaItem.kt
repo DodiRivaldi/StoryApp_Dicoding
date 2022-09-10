@@ -8,7 +8,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 @Entity(tableName = "cerita")
-data class CeritaItem (
+data class CeritaItem(
     @PrimaryKey
     @field:SerializedName("id")
     val id: String,
@@ -30,4 +30,4 @@ data class CeritaItem (
 
     @field:SerializedName("lon")
     val lon: Double?
-):Parcelable
+) : Parcelable

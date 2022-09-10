@@ -16,16 +16,17 @@ import com.dodi.cerita.databinding.ItemCeritaBinding
 import com.dodi.cerita.ui.activity.detail.DetailActivity
 import com.dodi.cerita.ui.activity.detail.DetailActivity.Companion.TOKEN
 
-class CeritaAdapter : PagingDataAdapter<CeritaItem,CeritaAdapter.ViewHolder>(CALLBACK){
+class CeritaAdapter : PagingDataAdapter<CeritaItem, CeritaAdapter.ViewHolder>(CALLBACK) {
 
-    class ViewHolder(private val binding : ItemCeritaBinding) : RecyclerView.ViewHolder(binding.root){
-        fun bind(context: Context, cerita : CeritaItem){
+    class ViewHolder(private val binding: ItemCeritaBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(context: Context, cerita: CeritaItem) {
             binding.apply {
                 Glide.with(context).load(cerita.photoUrl).into(imgStory)
                 tvUser.text = cerita.name
                 tvDesc.text = cerita.description
 
-                root.setOnClickListener{
+                root.setOnClickListener {
                     val optionsCompat: ActivityOptionsCompat =
                         ActivityOptionsCompat.makeSceneTransitionAnimation(
                             root.context as Activity,
@@ -43,32 +44,32 @@ class CeritaAdapter : PagingDataAdapter<CeritaItem,CeritaAdapter.ViewHolder>(CAL
         }
     }
 
-    companion object{
-        private val CALLBACK : DiffUtil.ItemCallback<CeritaItem> =
-                object : DiffUtil.ItemCallback<CeritaItem>(){
-                    override fun areItemsTheSame(
-                        oldItem: CeritaItem,
-                        newItem: CeritaItem
-                    ): Boolean {
-                        return oldItem.id == newItem.id
-                    }
-
-                    override fun areContentsTheSame(
-                        oldItem: CeritaItem,
-                        newItem: CeritaItem
-                    ): Boolean {
-                        return oldItem == newItem
-                    }
+    companion object {
+        val CALLBACK: DiffUtil.ItemCallback<CeritaItem> =
+            object : DiffUtil.ItemCallback<CeritaItem>() {
+                override fun areItemsTheSame(
+                    oldItem: CeritaItem,
+                    newItem: CeritaItem
+                ): Boolean {
+                    return oldItem.id == newItem.id
                 }
+
+                override fun areContentsTheSame(
+                    oldItem: CeritaItem,
+                    newItem: CeritaItem
+                ): Boolean {
+                    return oldItem == newItem
+                }
+            }
     }
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            holder.bind(holder.itemView.context, getItem(position)!!)
+        holder.bind(holder.itemView.context, getItem(position)!!)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = ItemCeritaBinding.inflate(LayoutInflater.from(parent.context),parent, false)
+        val binding = ItemCeritaBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 }

@@ -12,7 +12,7 @@ interface CeritaDao {
     suspend fun insertCerita(item: CeritaItem)
 
     @Query("SELECT * FROM cerita")
-    fun getAllCerita():PagingSource<Int,CeritaItem>
+    fun getAllCerita(): PagingSource<Int, CeritaItem>
 
     @Query("DELETE FROM cerita")
     suspend fun deleteAllCerita()
